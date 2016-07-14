@@ -1,9 +1,16 @@
 class Tile
+  attr_accessor :revealed, :bomb, :flagged
   def initialize
     @revealed = false
     @flagged = false
     @bomb = false
-    @adjacent_bombs = 0
   end
+
+  def to_s
+    bomb
+  end
+
+  private
+
 
 end
