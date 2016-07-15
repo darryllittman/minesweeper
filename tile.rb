@@ -10,6 +10,10 @@ class Tile
     bomb
   end
 
+  def reveal!
+    @revealed = true
+  end
+
   private
 
 

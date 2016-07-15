@@ -1,16 +1,18 @@
 require_relative 'board'
 
 class Game
+  attr_accessor :board
 
   def initialize
-    @grid = Board.new.seed_bombs
+    @board = Board.new
+    @board.seed_bombs
   end
 
   def over?
-    @grid.bomb_revealed?(pos)
+    @board.explode?
   end
 
   private
-  
-  attr_accessor :grid
+
+
 end

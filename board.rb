@@ -10,13 +10,24 @@ class Board
     @grid = Array.new(9) { Array.new(9) { Tile.new } }
   end
 
+  def to_s
+    @grid.each do |row|
+      p row.map { |tile| tile.to_s }
+    end
+  end
+
   def adjacent_bombs(pos)
   end
 
   def flagged?(pos)
   end
 
+  def has_bomb?(pos)
+    self[pos].bomb
+  end
+
   def revealed?(pos)
+    self[pos].revealed
   end
 
   def seed_bombs
@@ -25,18 +36,17 @@ class Board
     end
   end
 
-  def revealed_bomb?(pos)
-    self[pos].to_s
+  def explode?
+    @grid.any? { |row| row.any? { |tile| tile.revealed && tile.bomb }}
   end
 
   def [](pos)
-    x,y = pos
+    x, y = pos
     @grid[x][y]
   end
 
   def []=(pos, value)
-    byebug
-    x,y = pos
+    x, y = pos
     @grid[x][y] = value
   end
 
