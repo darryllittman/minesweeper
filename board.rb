@@ -7,37 +7,7 @@ class Board
   attr_accessor :grid
 
   def initialize
-    @grid = Array.new(9) { Array.new(9) { Tile.new } }
-  end
-
-  def to_s
-    @grid.each do |row|
-      p row.map { |tile| tile.to_s }
-    end
-  end
-
-  def adjacent_bombs(pos)
-  end
-
-  def flagged?(pos)
-  end
-
-  def has_bomb?(pos)
-    self[pos].bomb
-  end
-
-  def revealed?(pos)
-    self[pos].revealed
-  end
-
-  def seed_bombs
-    bomb_positions.each do |pos|
-      self[pos].bomb = true
-    end
-  end
-
-  def explode?
-    @grid.any? { |row| row.any? { |tile| tile.revealed && tile.bomb }}
+    @grid = Array.new(3) { Array.new(3) { Tile.new } }
   end
 
   def [](pos)
@@ -50,14 +20,78 @@ class Board
     @grid[x][y] = value
   end
 
+  def flagged?(pos)
+    self[pos].flagged
+  end
+
+  def has_bomb?(pos)
+    self[pos].bomb
+  end
+
+  def revealed?(pos)
+    self[pos].revealed
+  end
+
+
+
+
+
+
+  def calculate_adjacent_bombs(pos)
+    x,y = pos
+    adjacent_positions = { :top_left => [x-1, y-1],
+                          :top_right => [x-1, y+1],
+                          :top => [x-1, y],
+                          :right => [x, y+1],
+                          :bottom_right => [x+1, y+1],
+                          :bottom => [x+1, y],
+                          :bottom_left => [x+1, y-1],
+                          :left => [x, y-1]
+                        }
+    counter = 0
+
+    adjacent_positions.values.each do |position|
+      debugger
+      next if position.first < 0 || position.last < 0
+      counter += 1 if self[position].bomb
+    end
+
+    counter
+  end
+
+
+
+
+
+
+
+  def seed_bombs
+    bomb_positions.each do |pos|
+      self[pos].bomb = true
+    end
+  end
+
+  def explode?
+    @grid.any? { |row| row.any? { |tile| tile.revealed && tile.bomb }}
+  end
+
+
+
+
+  def to_s
+    @grid.each do |row|
+      p row.map { |tile| tile.to_s }
+    end
+  end
+
   private
 
   def bomb_positions
     results = []
 
-    while results.size < 10
+    while results.size < @grid.length
       pos = []
-      2.times { pos << (0..8).to_a.sample }
+      2.times { pos << (0...@grid.length).to_a.sample }
       results << pos unless results.include?(pos)
     end
 
